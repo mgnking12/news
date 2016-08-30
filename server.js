@@ -23,7 +23,7 @@ app.use(express.static('public'));
 
 
 // Database configuration with mongoose
-mongoose.connect('mongodb://localhost/APA');
+mongoose.connect('mongodb://heroku_6bdm103c:tgcb6tcvkr8vfrlfr1igo4quhn@ds019076.mlab.com:19076/heroku_6bdm103c');
 var db = mongoose.connection;
 
 // show any mongoose errors
