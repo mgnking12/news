@@ -1,28 +1,34 @@
-/* Showing Mongoose's "Populated" Method (18.3.8)
- * INSTRUCTOR ONLY
- * =============================================== */
-
-// dependencies
+//initialize express app
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser');
-var logger = require('morgan');
-var mongoose = require('mongoose');
-// Notice: Our scraping tools are prepared, too
+
+//for scraping
 var request = require('request');
 var cheerio = require('cheerio');
+var ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2'
+    // var url = 'http://www.austinpetsalive.org/adopt/dogs/'
 
-// use morgan and bodyparser with our app
+
+//some other fun dependencies
+var logger = require('morgan');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+
+//middleware to use morgan and bodyparser
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-// make public a static dir
-app.use(express.static('public'));
+//public static dir
+app.use(express.static(process.cwd() + '/public'));
+var exphbs = require('express-handlebars');
+app.engine('handlebars', exphbs({
+    defaultLayout: 'main'
+}));
+app.set('view engine', 'handlebars');
 
-
-// Database configuration with mongoose
+//connect to db
 mongoose.connect('mongodb://heroku_6bdm103c:tgcb6tcvkr8vfrlfr1igo4quhn@ds019076.mlab.com:19076/heroku_6bdm103c');
 var db = mongoose.connection;
 
@@ -47,50 +53,38 @@ var Article = require('./models/Article.js');
 
 // Simple index route
 app.get('/', function(req, res) {
-    res.send(index.html);
+    res.render('index');
 });
 
-// A GET request to scrape the echojs website.
+
 app.get('/scrape', function(req, res) {
-    // first, we grab the body of the html with request
     request('http://www.austinpetsalive.org/adopt/dogs/', function(error, response, html) {
-
-        // Load the html into cheerio and save it to a var.
-        // '$' becomes a shorthand for cheerio's selector commands, 
-        //  much like jQuery's '$'.
-        var $ = cheerio.load(html);
-        // console.log(html)
-        // an empty array to save the data that we'll scrape
-
-        // With cheerio, find each p-tag with a "title" class
-        // (i: iterator. element: the current element)
-        $('li.pet').each(function(i, element) {
+        if (error || response.statusCode != 200) {
+            console.log(error);
+        } else {
             var result = {};
-            // save the text of the element (this) in a "title" variable
-            result.title = $(element).find("h3").text();
-            result.link = $(element).find("p").text();
-            // using our Article model, create a new entry.
-            // Notice the (result):
-            // This effectively passes the result object to the entry (and the title and link)
-            var entry = new Article(result);
+            var $ = cheerio.load(html);
 
-            // now, save that entry to the db
-            entry.save(function(err, doc) {
-                // log any errors
-                if (err) {
-                    console.log(err);
-                }
-                // or log the doc
-                else {
-                    console.log(doc);
-                }
+            $('li.pet').each(function(i, element) {
+
+                result.title = $(element).find("h3").text();
+                result.link = $(element).find("p").text();
+                var entry = new Article(result);
+
+                entry.save(function(err, doc) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log(doc);
+                    }
+                });
             });
-
-
-        });
+        }
     });
-    // tell the browser that we finished scraping the text.
-    res.send("Scrape Complete");
+
+
+
+    res.redirect("/");
 });
 
 // this will get the articles we scraped from the mongoDB

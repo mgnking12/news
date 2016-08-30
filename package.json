@@ -1,31 +1,32 @@
 {
-    "name": "mongoose_skeleton",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/mgnking12/news.git"
-    },
-    "author": "Megan King",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/mgnking12/news/issues"
-    },
-    "homepage": "https://github.com/mgnking12/news#readme",
-    "dependencies": {
-        "body-parser": "^1.15.0",
-        "cheerio": "^0.20.0",
-        "express": "^4.13.4",
-        "material-ui": "^0.15.4",
-        "mongoose": "^4.4.6",
-        "morgan": "^1.7.0",
-        "react": "^15.3.1",
-        "react-dom": "^15.3.1",
-        "react-tap-event-plugin": "^1.0.0",
-        "request": "^2.69.0"
-    }
+  "name": "mongoose_skeleton",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgnking12/news.git"
+  },
+  "author": "Megan King",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mgnking12/news/issues"
+  },
+  "homepage": "https://github.com/mgnking12/news#readme",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "cheerio": "^0.20.0",
+    "express": "^4.13.4",
+    "express-handlebars": "^3.0.0",
+    "material-ui": "^0.15.4",
+    "mongoose": "^4.4.6",
+    "morgan": "^1.7.0",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "react-tap-event-plugin": "^1.0.0",
+    "request": "^2.69.0"
+  }
 }
